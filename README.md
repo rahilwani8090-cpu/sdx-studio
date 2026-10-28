@@ -19,15 +19,22 @@ assets/img/icons/       Official app icons from each Google Play listing
 assets/img/shots/       Store screenshots (thumb/ = small copies for the hero strip)
 ```
 
-## Keeping it accurate
+## Store figures update automatically
 
-Store figures (ratings, installs, "Updated" dates, versions) were read from Google Play on 28 Oct 2026.
-They live in plain HTML: search `index.html` for `metrics` and `tile-meta` to update them, and the
-`720` in the stats band is the sum of Play's install lower bounds (500 + 100 + 100 + 10 + 10).
+`.github/workflows/deploy.yml` runs every 6 hours (and on every push). It runs
+`.github/scripts/update_play_stats.py`, which reads the five public Google Play listings and rewrites
+every element marked `data-play="<app>.<field>"` in `index.html`: installs, rating, version and
+last-update date, plus the install total and the top-rating line in the stats band. If anything
+changed it commits the new figures, then redeploys the site.
+
+- Ratings are read with `gl=IN` because Play shows ratings per country. Apps without a rating show "New".
+- If Play can't be reached or a value can't be read, the last good value in `assets/data/play-stats.json` is kept.
+- Run it by hand any time: GitHub → Actions → "Deploy site" → "Run workflow", or `python3 .github/scripts/update_play_stats.py`.
+- To track a new app, add it to `APPS` in the script and tag its figures in `index.html` the same way.
 
 ## Deploying
 
-Live on GitHub Pages from the `main` branch of github.com/rahilwani8090-cpu/sdx-studio.
+Live on GitHub Pages, deployed by the workflow above from github.com/rahilwani8090-cpu/sdx-studio.
 Because the account's user site uses the custom domain snapdocx.in, GitHub serves this project at
-https://snapdocx.in/sdx-studio/ — push to `main` and the site rebuilds within a minute.
+https://snapdocx.in/sdx-studio/ — push to `main` and the site redeploys within a couple of minutes.
 If the address ever changes, update the absolute URLs in `index.html` (canonical, og:*), `robots.txt` and `sitemap.xml`.

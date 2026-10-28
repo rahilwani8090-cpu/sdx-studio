@@ -78,6 +78,7 @@
   $$('[data-reveal]').forEach((el) => revealObserver.observe(el));
 
   /* ---------- Count-up stats ---------- */
+  const formatCount = (value, decimals) => value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   const countObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -85,19 +86,19 @@
       const el = entry.target;
       const target = parseFloat(el.dataset.count);
       const decimals = parseInt(el.dataset.decimals || '0', 10);
-      if (reduceMotion) { el.textContent = target.toFixed(decimals); return; }
+      if (reduceMotion) { el.textContent = formatCount(target, decimals); return; }
       const duration = 1500;
       const start = performance.now();
       const tick = (now) => {
         const t = Math.min(1, (now - start) / duration);
         const eased = 1 - Math.pow(2, -10 * t);
-        el.textContent = (target * (t === 1 ? 1 : eased)).toFixed(decimals);
+        el.textContent = formatCount(target * (t === 1 ? 1 : eased), decimals);
         if (t < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
     });
   }, { threshold: 0.6 });
-  $$('[data-count]').forEach((el) => { el.textContent = (0).toFixed(parseInt(el.dataset.decimals || '0', 10)); countObserver.observe(el); });
+  $$('[data-count]').forEach((el) => { el.textContent = formatCount(0, parseInt(el.dataset.decimals || '0', 10)); countObserver.observe(el); });
 
   /* ---------- Pointer effects ---------- */
   if (finePointer) {
