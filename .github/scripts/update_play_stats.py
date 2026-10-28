@@ -33,6 +33,7 @@ APPS = {
 URL = "https://play.google.com/store/apps/details?id={pkg}&hl=en&gl=IN"
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0 Safari/537.36"
 FIELDS = ("installs", "rating", "reviews", "version", "updated")
+IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 
 
 def fetch(pkg):
@@ -65,9 +66,16 @@ def parse(page, pkg):
     m = re.search(r">([\d.,]+[KMB]?\+)</div><div[^>]*>Downloads<", page)
     if m:
         out["installs"] = m.group(1)
-    m = re.search(r"Updated on</div><div[^>]*>([^<]+)<", page)
-    if m and (d := parse_date(htmlmod.unescape(m.group(1)))):
-        out["updated"] = d
+    # Play prints dates in the viewer's time zone, so a US runner sees a different day than India.
+    # Use the exact timestamp (data key 146) shown in India time; fall back to the printed date.
+    m = re.search(r'"146":\[\["[^"]*",\[(\d{9,11}),', page)
+    if m:
+        d = dt.datetime.fromtimestamp(int(m.group(1)), IST)
+        out["updated"] = f"{d:%b} {d.day}, {d.year}"
+    else:
+        m = re.search(r"Updated on</div><div[^>]*>([^<]+)<", page)
+        if m and (d := parse_date(htmlmod.unescape(m.group(1)))):
+            out["updated"] = d
     # The app's own rating sits in its starRating block. Other "Rated x stars" labels on the
     # page belong to the "More by SDX STUDIO" strip, so never fall back to those.
     m = re.search(r'itemprop="starRating".{0,400}?aria-label="Rated ([0-9.]+) stars', page, re.S)
