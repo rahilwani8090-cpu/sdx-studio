@@ -651,7 +651,7 @@ ul { padding: 0; list-style: none; }
 kbd { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line-2); }
 
 /* ---------- Workshop ---------- */
-.bench-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.bench-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .card {
   display: flex; flex-direction: column; gap: 14px;
   padding: 28px; border-radius: var(--r-lg);
@@ -709,22 +709,6 @@ kbd { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius
 }
 .sprint-form input:focus { outline: none; border-color: var(--app); box-shadow: 0 0 0 3px color-mix(in srgb, var(--app) 30%, transparent); }
 .sprint-form input:disabled { opacity: 0.5; }
-
-/* HEARSAY ripple */
-.ripple { margin-top: auto; width: 100%; height: auto; }
-.ripple-links path { fill: none; stroke: var(--line-2); stroke-width: 1.2; stroke-dasharray: 200; stroke-dashoffset: 200; }
-.ripple-nodes circle { fill: var(--surface-2); stroke: var(--app); stroke-width: 1.4; transform-box: fill-box; transform-origin: center; }
-.ripple-nodes .n0 { fill: var(--app); }
-.ripple-nodes .hit { fill: var(--app); }
-.card.is-in .ripple-links path { animation: draw 2.4s var(--ease-out) forwards; }
-.card.is-in .ripple-nodes circle { animation: node 2.4s var(--ease-out) backwards; }
-.card.is-in .ripple-nodes .n1 { animation-delay: 0.4s; }
-.card.is-in .ripple-nodes .n2 { animation-delay: 0.8s; }
-.card.is-in .ripple-nodes .n3 { animation-delay: 1.2s; }
-.card.is-in .ripple-nodes .hit { animation: node 2.4s var(--ease-out) 1.2s backwards, glow 2.6s var(--ease) 2.6s infinite; }
-@keyframes draw { to { stroke-dashoffset: 0; } }
-@keyframes node { from { transform: scale(0); opacity: 0; } 30% { opacity: 1; } }
-@keyframes glow { 50% { filter: drop-shadow(0 0 6px var(--app)); transform: scale(1.4); } }
 
 /* ---------- Craft ---------- */
 .craft { border-top: 1px solid var(--line); background: linear-gradient(var(--bg-2), var(--bg)); }
@@ -799,8 +783,6 @@ kbd { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius
   .chapter-grid { grid-template-columns: 1fr; }
   .chapter--flip .chapter-copy { order: 0; }
   .pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .bench-grid { grid-template-columns: 1fr 1fr; }
-  .bench-grid .card:last-child { grid-column: span 2; }
 }
 @media (max-width: 760px) {
   body { font-size: 16px; }
@@ -819,7 +801,6 @@ kbd { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius
   .pillars, .bench-grid { grid-template-columns: minmax(0, 1fr); }
   .letter-forms span { font-size: 9.5px; letter-spacing: 0.02em; }
   .letter-forms b { font-size: 34px; }
-  .bench-grid .card:last-child { grid-column: auto; }
   .dock { gap: 10px; padding: 10px 12px; }
   .dock li { width: 48px; height: 48px; }
   .gallery-track figure { flex-basis: 64vw; }
