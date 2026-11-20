@@ -1,6 +1,6 @@
 {
   "source": "Google Play listings (gl=IN)",
-  "changed_on": "2026-11-14",
+  "changed_on": "2026-11-20",
   "apps": {
     "tafseer": {
       "installs": "1K+",
@@ -30,8 +30,8 @@
     },
     "kashmirmarket": {
       "installs": "50+",
-      "version": "1.0.4",
-      "updated": "Oct 6, 2026"
+      "version": "1.0.6",
+      "updated": "Nov 20, 2026"
     }
   }
 }
